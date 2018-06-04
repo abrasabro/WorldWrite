@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "805871632587",
+    "firebase_url": "https://world-write-d873f.firebaseio.com",
+    "project_id": "world-write-d873f",
+    "storage_bucket": "world-write-d873f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805871632587:android:dae50fcc3ffdd377",
+        "android_client_info": {
+          "package_name": "abrasabro.worldwrite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805871632587-ehe5jc1jgrj02jr2l67khopcepfa3ul9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "abrasabro.worldwrite",
+            "certificate_hash": "ca219476c5017cd0f3a869f25eb54325cc72a6ba"
+          }
+        },
+        {
+          "client_id": "805871632587-qbauf8alkdlpf2hgreo61odiaotet5or.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZuqrYenJwBUOBWWkgNQMhh9g4fiqTbls"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805871632587-qbauf8alkdlpf2hgreo61odiaotet5or.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
