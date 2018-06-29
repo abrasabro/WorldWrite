@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+<data>
+    <variable name="viewmodel"
+        type="abrasabro.worldwrite.MainViewModel">
+    </variable>
+</data>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +15,7 @@
     android:background="@color/cardview_light_background"
     android:visibility="visible">
 
+
     <TextView
         android:id="@+id/bottomdrawer_main_write_message"
         android:layout_width="match_parent"
@@ -16,7 +24,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textSize="14sp"
-        android:text="Message"
+        android:text="@{viewmodel.selectedWrite.message}"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +46,7 @@
         android:paddingTop="6dp"
         android:text="Good:"
         android:textAllCaps="false"
+        android:onClick="rateGood"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomdrawer_main_write_divider" />
 
@@ -55,6 +64,7 @@
         android:paddingTop="4dp"
         android:text="Poor:"
         android:textAllCaps="false"
+        android:onClick="ratePoor"
         app:layout_constraintStart_toEndOf="@+id/bottomdrawer_main_write_center"
         app:layout_constraintTop_toBottomOf="@+id/bottomdrawer_main_write_divider" />
 
@@ -125,3 +135,4 @@
         app:layout_constraintTop_toBottomOf="@+id/bottomdrawer_main_write_message"
         app:srcCompat="@android:drawable/divider_horizontal_bright" />
 </android.support.constraint.ConstraintLayout>
+</layout>
