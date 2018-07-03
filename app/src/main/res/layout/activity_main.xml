@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="viewmodel"
+            type="abrasabro.worldwrite.MainViewModel">
+        </variable>
+    </data>
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -28,6 +34,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <include
+        android:id="@+id/include_bottomdrawer_main_write"
         layout="@layout/bottomdrawer_main_write"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
-
+</layout>
 
 
 

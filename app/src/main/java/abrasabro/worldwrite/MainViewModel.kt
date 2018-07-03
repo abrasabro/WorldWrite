@@ -4,6 +4,8 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.Intent
+import android.database.Observable
+import android.databinding.ObservableField
 import android.graphics.BitmapFactory
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v7.app.AlertDialog
@@ -18,16 +20,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 
-class MainViewModel : ViewModel() {
+class MainViewModel : ObservableViewModel() {
 
     companion object {
         lateinit var instance: MainViewModel
-        var selectedWrite: Write? = null
         var selectedWriteHasRatedGood = true
         var selectedWriteHasRatedPoor = true
         const val RC_SIGN_IN = 1
     }
 
+    //var selectedWriteMessage: ObservableField<String> = ObservableField<String>()
+    val selectedWriteMessage = ObservableField("binded")
+    var selectedWrite: Write = Write()
     lateinit var mMap: GoogleMap
     lateinit var mapPin: BitmapDescriptor
     val mapMarkerToWriteHashMap = mutableMapOf<String, Write>()
@@ -39,6 +43,7 @@ class MainViewModel : ViewModel() {
     lateinit var firebaseUser: FirebaseUser
 
     fun onCreate() {
+        selectedWriteMessage.set("not set")
         instance = this
         val mapFragment = getMapSupportFragment()
         mapFragment.getMapAsync { googleMap: GoogleMap -> onMapReady(googleMap) }
@@ -49,11 +54,11 @@ class MainViewModel : ViewModel() {
     }
 
     private fun getMapSupportFragment(): SupportMapFragment {
-        return MainActivity.mapFragment
+        return activity().getMapSupportFragment()
     }
 
     private fun closeWrite() {
-        selectedWrite = null
+        //selectedWrite = null
         activity().closeWrite()
     }
 
@@ -66,7 +71,10 @@ class MainViewModel : ViewModel() {
         if (currentUser.poorRatings.contains(write.messageUID)) {
             selectedWriteHasRatedPoor = true
         }
-        selectedWrite = write
+        /*selectedWrite.message = write.message
+        selectedWrite = write*/
+        selectedWrite.set(write)
+        //selectedWrite.notifyChange()
         activity().showWrite()
     }
 
@@ -88,6 +96,7 @@ class MainViewModel : ViewModel() {
         mMap.setOnMapClickListener { latLng: LatLng? -> onMapClick(latLng) }
         val defaultMapCenter = LatLng(40.045204, -96.803178)
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(defaultMapCenter, 1f)))
+        addFirebaseListeners()
     }
 
     private fun onMarkerClick(marker: Marker?): Boolean {
@@ -153,7 +162,7 @@ class MainViewModel : ViewModel() {
             val write = dataSnapshot?.getValue(Write::class.java)
             if (write != null) {
                 if (write.messageUID == selectedWrite?.messageUID) {
-                    selectedWrite = write
+                    selectedWrite.set(write)
                 }
                 mapMarkerToWriteHashMap.forEach { key: String, value: Write ->
                     if (value.messageUID == write.messageUID) {
@@ -243,16 +252,31 @@ class MainViewModel : ViewModel() {
 
     private fun onSignedInInitialize(user: FirebaseUser) {
         firebaseUser = user
+        addFirebaseListeners()
+    }
+
+    private fun addFirebaseListeners(){
+        var googleMapReady = true
+        var firebaseReady = true
         //verify google map has been loaded asynchronously
         try {
             mMap.isMyLocationEnabled
         } catch (e: UninitializedPropertyAccessException) {
-            Log.d("onSignedInInitialize", "googlemap not ready before firebase")
-            errorDialog("Error creating Google Map")
+            Log.d("addFirebaseListeners", "googlemap not ready before firebase")
+            //errorDialog("Error creating Google Map")
+            googleMapReady = false
         }
-        messagesDatabaseReference.addChildEventListener(messagesEventListener)
-        usersDatabaseReference = firebaseDatabase.reference.child("users").child(firebaseUser.uid)
-        usersDatabaseReference.addValueEventListener(userEventListener)
+        try {
+            firebaseUser.isAnonymous
+        } catch (e: UninitializedPropertyAccessException) {
+            Log.d("addFirebaseListeners", "firebase not ready before googlemap")
+            firebaseReady = false
+        }
+        if(googleMapReady && firebaseReady) {
+            messagesDatabaseReference.addChildEventListener(messagesEventListener)
+            usersDatabaseReference = firebaseDatabase.reference.child("users").child(firebaseUser.uid)
+            usersDatabaseReference.addValueEventListener(userEventListener)
+        }
     }
 
     private fun onSignedOutCleanup() {

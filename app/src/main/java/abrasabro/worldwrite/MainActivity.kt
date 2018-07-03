@@ -1,5 +1,9 @@
 package abrasabro.worldwrite
 
+//import abrasabro.worldwrite.databinding.ActivityMainBinding
+import abrasabro.worldwrite.databinding.ActivityMainBinding
+import abrasabro.worldwrite.databinding.BottomdrawerMainWriteBinding
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +14,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_nav.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_write.*
+import android.databinding.DataBindingUtil
+import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.bottomdrawer_main_write.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,30 +26,32 @@ class MainActivity : AppCompatActivity() {
         lateinit var mapFragment: SupportMapFragment
     }
 
+    lateinit var binding: ActivityMainBinding
+    lateinit var writeBinding: BottomdrawerMainWriteBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = this
-        viewModel = MainViewModel()
-        setContentView(R.layout.activity_main)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val writeBind: BottomdrawerMainWriteBinding? = DataBindingUtil.bind<BottomdrawerMainWriteBinding>(binding.root.include_bottomdrawer_main_write)
+        if(writeBind != null)
+            writeBinding = writeBind
         viewModel.onCreate()
-        mapFragment = main_mapfragment as SupportMapFragment
+        binding.viewmodel = viewModel
+        writeBinding.viewmodel = viewModel
+        writeBinding.selectedwrite = viewModel.selectedWrite
         closeWrite()
     }
 
-    override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View {
-        val view = super.onCreateView(name, context, attrs)
-        viewModel.onCreateView()
-        //val binding
-        return view
-    }
-
     fun closeWrite() {
-        bottomdrawer_main_write_layout.visibility = View.GONE
+        binding.root.include_bottomdrawer_main_write.visibility = View.GONE
         bottomdrawer_main_nav_layout.visibility = View.VISIBLE
     }
 
     fun showWrite() {
         bottomdrawer_main_nav_layout.visibility = View.GONE
+        binding.root.include_bottomdrawer_main_write.visibility = View.VISIBLE
     }
 
     override fun onResume() {
@@ -75,5 +84,10 @@ class MainActivity : AppCompatActivity() {
 
     fun ratePoor(view: View){
         viewModel.ratePoor()
+    }
+
+    fun getMapSupportFragment(): SupportMapFragment {
+        mapFragment = main_mapfragment as SupportMapFragment
+        return mapFragment
     }
 }

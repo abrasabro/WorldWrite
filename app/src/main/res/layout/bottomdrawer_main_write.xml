@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 <data>
+    <import type="abrasabro.worldwrite.Write"></import>
     <variable name="viewmodel"
         type="abrasabro.worldwrite.MainViewModel">
+    </variable>
+    <variable
+        name="selectedwrite"
+        type="abrasabro.worldwrite.Write">
     </variable>
 </data>
 
@@ -23,9 +28,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="14sp"
-        android:text="@{viewmodel.selectedWrite.message}"
+        android:hint="databinding not working"
+        android:text="@{selectedwrite.message}"
         android:textColor="@android:color/black"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +81,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="good"
+        android:text="@{String.valueOf(selectedwrite.ratingGood)}"
         app:layout_constraintBottom_toBottomOf="@+id/bottomdrawer_main_write_rategood"
         app:layout_constraintStart_toEndOf="@+id/bottomdrawer_main_write_rategood"
         app:layout_constraintTop_toTopOf="@+id/bottomdrawer_main_write_rategood" />
@@ -87,7 +93,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="poor"
+        android:text="@{String.valueOf(selectedwrite.ratingPoor)}"
         app:layout_constraintBottom_toBottomOf="@+id/bottomdrawer_main_write_ratepoor"
         app:layout_constraintStart_toEndOf="@+id/bottomdrawer_main_write_ratepoor"
         app:layout_constraintTop_toTopOf="@+id/bottomdrawer_main_write_ratepoor" />
@@ -103,7 +109,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:text="address"
+        android:text="@{selectedwrite.address}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomdrawer_main_write_rategood" />
