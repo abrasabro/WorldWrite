@@ -44,4 +44,7 @@ class Write: BaseObservable(){
         ratingPoor = write.ratingPoor
         messageUID = write.messageUID
     }
+    fun set(message: String, lat: Double, lon: Double, address: String, ratingGood: Int = 0, ratingPoor: Int = 0, messageUID: String = ""){
+
+    }
 }

@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_nav.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_write.*
 import android.databinding.DataBindingUtil
+import android.support.v4.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_write.view.*
 
@@ -90,4 +91,9 @@ class MainActivity : AppCompatActivity() {
         mapFragment = main_mapfragment as SupportMapFragment
         return mapFragment
     }
+
+    fun startMessageActivity(view: View) {
+        ContextCompat.startActivity(this, Intent(this, MessageActivity::class.java), null)
+    }
+
 }

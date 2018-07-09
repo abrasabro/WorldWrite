@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="address"
+            type="String">
+        </variable>
+        <variable
+            name="message"
+            type="String">
+        </variable>
+    </data>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/message_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity" />
+
+    <EditText
+        android:id="@+id/message_message"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/darker_gray"
+        android:ems="10"
+        android:hint="Message"
+        android:inputType="text|textMultiLine|textNoSuggestions"
+        android:lines="3"
+        android:maxLength="140"
+        android:maxLines="3"
+        android:overScrollMode="never"
+        android:scrollHorizontally="false"
+        android:scrollY="0dp"
+        android:textSize="14sp"
+        android:text="@={message}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/message_write"
+        android:layout_width="45dp"
+        android:layout_height="83dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="onWriteClicked"
+        android:background="#11000000"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/message_address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/makenew" />
+
+    <TextView
+        android:id="@+id/message_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="@{address}"
+        app:layout_constraintBottom_toTopOf="@+id/message_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/message_message" />
+
+</android.support.constraint.ConstraintLayout>
+</layout>

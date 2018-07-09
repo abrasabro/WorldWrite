@@ -29,9 +29,7 @@ class MainViewModel : ObservableViewModel() {
         const val RC_SIGN_IN = 1
     }
 
-    //var selectedWriteMessage: ObservableField<String> = ObservableField<String>()
-    val selectedWriteMessage = ObservableField("binded")
-    var selectedWrite: Write = Write()
+        var selectedWrite: Write = Write()
     lateinit var mMap: GoogleMap
     lateinit var mapPin: BitmapDescriptor
     val mapMarkerToWriteHashMap = mutableMapOf<String, Write>()
@@ -43,14 +41,9 @@ class MainViewModel : ObservableViewModel() {
     lateinit var firebaseUser: FirebaseUser
 
     fun onCreate() {
-        selectedWriteMessage.set("not set")
         instance = this
         val mapFragment = getMapSupportFragment()
         mapFragment.getMapAsync { googleMap: GoogleMap -> onMapReady(googleMap) }
-    }
-
-    fun onCreateView() {
-
     }
 
     private fun getMapSupportFragment(): SupportMapFragment {
@@ -58,7 +51,6 @@ class MainViewModel : ObservableViewModel() {
     }
 
     private fun closeWrite() {
-        //selectedWrite = null
         activity().closeWrite()
     }
 
@@ -71,10 +63,7 @@ class MainViewModel : ObservableViewModel() {
         if (currentUser.poorRatings.contains(write.messageUID)) {
             selectedWriteHasRatedPoor = true
         }
-        /*selectedWrite.message = write.message
-        selectedWrite = write*/
         selectedWrite.set(write)
-        //selectedWrite.notifyChange()
         activity().showWrite()
     }
 
@@ -132,10 +121,6 @@ class MainViewModel : ObservableViewModel() {
             usersDatabaseReference.setValue(currentUser)
             selectedWriteHasRatedPoor = true
         }
-    }
-
-    fun startMessageActivity() {
-        //ContextCompat.startActivity(context(), Intent(context(), MessageActivity::class.java), null)
     }
 
     fun signOut() {
