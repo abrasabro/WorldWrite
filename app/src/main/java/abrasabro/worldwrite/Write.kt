@@ -45,6 +45,12 @@ class Write: BaseObservable(){
         messageUID = write.messageUID
     }
     fun set(message: String, lat: Double, lon: Double, address: String, ratingGood: Int = 0, ratingPoor: Int = 0, messageUID: String = ""){
-
+        this.message = message
+        this.lat = lat
+        this.lon = lon
+        this.address = address
+        this.ratingGood = ratingGood
+        this.ratingPoor = ratingPoor
+        this.messageUID = messageUID
     }
 }

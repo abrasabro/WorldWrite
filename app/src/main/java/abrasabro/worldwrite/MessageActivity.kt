@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_message.*
 
@@ -17,17 +18,16 @@ class MessageActivity: AppCompatActivity() {
         lateinit var viewModel: MessageViewModel
     }
 
-    lateinit var binding: ActivityMessageBinding
+    private lateinit var binding: ActivityMessageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = this
         viewModel = ViewModelProviders.of(this).get(MessageViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_message)
-        binding.address = viewModel.mAddress.get()
-        binding.message = viewModel.mMessage
+        binding.viewmodel = viewModel
         val mapFragment = message_map as SupportMapFragment
-        mapFragment.getMapAsync {  }
+        mapFragment.getMapAsync{googleMap: GoogleMap -> viewModel.onMapReady(googleMap) }
         message_write.isEnabled = false
     }
 

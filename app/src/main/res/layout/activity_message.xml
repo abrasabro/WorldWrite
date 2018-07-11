@@ -2,12 +2,8 @@
 <layout>
     <data>
         <variable
-            name="address"
-            type="String">
-        </variable>
-        <variable
-            name="message"
-            type="String">
+            name="viewmodel"
+            type="abrasabro.worldwrite.MessageViewModel">
         </variable>
     </data>
 <android.support.constraint.ConstraintLayout
@@ -42,7 +38,7 @@
         android:scrollHorizontally="false"
         android:scrollY="0dp"
         android:textSize="14sp"
-        android:text="@={message}"
+        android:text="@={viewmodel.MMessage}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -69,7 +65,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="@{address}"
+        android:text="@{viewmodel.MAddress}"
         app:layout_constraintBottom_toTopOf="@+id/message_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/message_message" />
