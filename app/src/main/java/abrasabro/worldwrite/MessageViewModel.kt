@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.FirebaseDatabase
 import java.io.IOException
 import java.util.*
@@ -183,11 +185,15 @@ class MessageViewModel : ObservableViewModel(), OnMapReadyCallback {
         val message = messagesDatabaseReference.push()
         write.messageUID = message.key
         message.setValue(write)
+        analytics().logEvent(FirebaseAnalytics.Event.SHARE, null)
         activity().finish()
     }
 
     private fun errorDialog(msg: String = "Error") {
         Log.d("errorDialog", "dialog: $msg")
+        analytics().logEvent("error_message", Bundle().apply {
+            putString("message", msg)
+        })
         val builder = AlertDialog.Builder(MessageActivity.instance)
         builder.setTitle("Error")
         builder.setMessage(msg)
@@ -207,5 +213,9 @@ class MessageViewModel : ObservableViewModel(), OnMapReadyCallback {
 
     private fun activity(): MessageActivity {
         return MessageActivity.instance
+    }
+
+    private fun analytics(): FirebaseAnalytics {
+        return MessageActivity.mFirebaseAnalytics
     }
 }

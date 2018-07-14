@@ -7,6 +7,7 @@ import android.content.Intent
 import android.database.Observable
 import android.databinding.ObservableField
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v7.app.AlertDialog
 import android.util.Log
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -75,6 +77,10 @@ class MainViewModel : ObservableViewModel() {
         return MainActivity.instance
     }
 
+    private fun analytics(): FirebaseAnalytics{
+        return MainActivity.mFirebaseAnalytics
+    }
+
     private fun onMapReady(googleMap: GoogleMap) {
         val bitmapFactoryOptions = BitmapFactory.Options()
         bitmapFactoryOptions.inSampleSize = 6
@@ -92,6 +98,7 @@ class MainViewModel : ObservableViewModel() {
         if (marker != null) {
             val write = mapMarkerToWriteHashMap[marker.id]
             if (write != null) {
+                analytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, null)
                 showWrite(write)
                 return true
             }
@@ -199,6 +206,9 @@ class MainViewModel : ObservableViewModel() {
     private val authStateListener = { auth: FirebaseAuth ->
         val user = auth.currentUser
         if (user != null) {
+            analytics().logEvent(FirebaseAnalytics.Event.LOGIN, Bundle().apply{putString(
+                    FirebaseAnalytics.Param.METHOD, user.providerId
+            )})
             onSignedInInitialize(user)
         } else {
             onSignedOutCleanup()
@@ -270,6 +280,9 @@ class MainViewModel : ObservableViewModel() {
 
     private fun errorDialog(msg: String = "Error") {
         Log.d("errorDialog", "dialog: $msg")
+        analytics().logEvent("error_main", Bundle().apply {
+            putString("message", msg)
+        })
         val builder = AlertDialog.Builder(context())
         builder.setTitle("Error")
         builder.setMessage(msg)

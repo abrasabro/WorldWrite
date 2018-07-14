@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.bottomdrawer_main_nav.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_write.*
 import android.databinding.DataBindingUtil
 import android.support.v4.content.ContextCompat
+import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.bottomdrawer_main_write.view.*
 
@@ -23,16 +26,19 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         lateinit var instance: MainActivity
-        lateinit var viewModel: MainViewModel
         lateinit var mapFragment: SupportMapFragment
+        lateinit var mFirebaseAnalytics: FirebaseAnalytics
     }
-
-    lateinit var binding: ActivityMainBinding
-    lateinit var writeBinding: BottomdrawerMainWriteBinding
+    private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var writeBinding: BottomdrawerMainWriteBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = this
+        val fabric = Fabric.Builder(this).kits(Crashlytics()).debuggable(true).build()
+        Fabric.with(fabric)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         val writeBind: BottomdrawerMainWriteBinding? = DataBindingUtil.bind<BottomdrawerMainWriteBinding>(binding.root.include_bottomdrawer_main_write)
@@ -93,6 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startMessageActivity(view: View) {
+        mFirebaseAnalytics.logEvent("attempt_share", null)
         ContextCompat.startActivity(this, Intent(this, MessageActivity::class.java), null)
     }
 

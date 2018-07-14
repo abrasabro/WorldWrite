@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_message.*
 
 
@@ -16,6 +17,7 @@ class MessageActivity: AppCompatActivity() {
     companion object {
         lateinit var instance: MessageActivity
         lateinit var viewModel: MessageViewModel
+        lateinit var mFirebaseAnalytics: FirebaseAnalytics
     }
 
     private lateinit var binding: ActivityMessageBinding
@@ -23,6 +25,7 @@ class MessageActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = this
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         viewModel = ViewModelProviders.of(this).get(MessageViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_message)
         binding.viewmodel = viewModel
