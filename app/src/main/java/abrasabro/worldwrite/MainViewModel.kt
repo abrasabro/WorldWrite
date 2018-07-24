@@ -1,11 +1,8 @@
 package abrasabro.worldwrite
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.Intent
-import android.database.Observable
-import android.databinding.ObservableField
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat.startActivityForResult
@@ -31,10 +28,10 @@ class MainViewModel : ObservableViewModel() {
         const val RC_SIGN_IN = 1
     }
 
-        var selectedWrite: Write = Write()
+    var selectedWrite: Write = Write()
     lateinit var mMap: GoogleMap
     lateinit var mapPin: BitmapDescriptor
-    val mapMarkerToWriteHashMap = mutableMapOf<String, Write>()
+    val mapMarkerToWriteHashMap = mutableMapOf<Marker, Write>()
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val messagesDatabaseReference = firebaseDatabase.reference.child("messages")
@@ -42,10 +39,22 @@ class MainViewModel : ObservableViewModel() {
     lateinit var currentUser: User
     lateinit var firebaseUser: FirebaseUser
 
+
+
     fun onCreate() {
-        instance = this
-        val mapFragment = getMapSupportFragment()
-        mapFragment.getMapAsync { googleMap: GoogleMap -> onMapReady(googleMap) }
+        try {
+            if(instance != this){
+                instance = this
+            }
+            getMapSupportFragment().getMapAsync {googleMap: GoogleMap -> onMapReadyAgain(googleMap)}
+        }catch (e: UninitializedPropertyAccessException){
+            instance = this
+            getMapSupportFragment().getMapAsync { googleMap: GoogleMap -> onMapReady(googleMap) }
+        }
+        val bitmapFactoryOptions = BitmapFactory.Options()
+        bitmapFactoryOptions.inSampleSize = 6
+        mapPin = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
+                context().resources, R.drawable.pin, bitmapFactoryOptions))
     }
 
     private fun getMapSupportFragment(): SupportMapFragment {
@@ -82,10 +91,6 @@ class MainViewModel : ObservableViewModel() {
     }
 
     private fun onMapReady(googleMap: GoogleMap) {
-        val bitmapFactoryOptions = BitmapFactory.Options()
-        bitmapFactoryOptions.inSampleSize = 6
-        mapPin = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(
-                context().resources, R.drawable.pin, bitmapFactoryOptions))
         mMap = googleMap
         mMap.setOnMarkerClickListener { marker: Marker? -> onMarkerClick(marker) }
         mMap.setOnMapClickListener { latLng: LatLng? -> onMapClick(latLng) }
@@ -94,9 +99,15 @@ class MainViewModel : ObservableViewModel() {
         addFirebaseListeners()
     }
 
+    private fun onMapReadyAgain(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.setOnMarkerClickListener { marker: Marker? -> onMarkerClick(marker) }
+        mMap.setOnMapClickListener { latLng: LatLng? -> onMapClick(latLng) }
+    }
+
     private fun onMarkerClick(marker: Marker?): Boolean {
         if (marker != null) {
-            val write = mapMarkerToWriteHashMap[marker.id]
+            val write = mapMarkerToWriteHashMap[marker]
             if (write != null) {
                 analytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, null)
                 showWrite(write)
@@ -156,7 +167,7 @@ class MainViewModel : ObservableViewModel() {
                 if (write.messageUID == selectedWrite?.messageUID) {
                     selectedWrite.set(write)
                 }
-                mapMarkerToWriteHashMap.forEach { key: String, value: Write ->
+                mapMarkerToWriteHashMap.forEach { key: Marker, value: Write ->
                     if (value.messageUID == write.messageUID) {
                         mapMarkerToWriteHashMap[key] = write
                     }
@@ -170,9 +181,8 @@ class MainViewModel : ObservableViewModel() {
             if (write != null) {
                 val marker = mMap.addMarker(MarkerOptions()
                         .position(LatLng(write.lat, write.lon))
-                        .title(write.message)
                         .icon(mapPin))
-                mapMarkerToWriteHashMap[marker.id] = write
+                mapMarkerToWriteHashMap[marker] = write
             }
         }
 
@@ -239,6 +249,7 @@ class MainViewModel : ObservableViewModel() {
     fun onPause() {
         firebaseAuth.removeAuthStateListener(authStateListener)
         messagesDatabaseReference.removeEventListener(messagesEventListener)
+        mapMarkerToWriteHashMap.clear()
     }
 
     fun onResume() {
@@ -294,7 +305,7 @@ class MainViewModel : ObservableViewModel() {
         { _, _: Int ->
             activity().finishActivity()
         }
-        builder.setOnCancelListener { errorDialog(msg) }
+        builder.setOnCancelListener { activity().finishActivity() }
         builder.create().show()
     }
 }

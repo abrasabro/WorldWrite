@@ -129,7 +129,8 @@ class MessageViewModel : ObservableViewModel(), OnMapReadyCallback {
                     } else {
                         Log.d("getDeviceLocation()", "getLastLocation() was successful with no result")
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, mDefaultZoom))
-                        errorDialog("getLastLocation() was successful with no result")
+                        errorDialog("getLastLocation() was successful with no result." +
+                                "Do you have location enabled?")
                     }
                 } else {
                     Log.d("getDeviceLocation()", "getLastLocation() was unsuccessful")
@@ -203,7 +204,7 @@ class MessageViewModel : ObservableViewModel(), OnMapReadyCallback {
         builder.setNegativeButton("Cancel") { _, _: Int ->
             activity().finish()
         }
-        builder.setOnCancelListener { errorDialog(msg) }
+        builder.setOnCancelListener { activity().finish() }
         builder.create().show()
     }
 

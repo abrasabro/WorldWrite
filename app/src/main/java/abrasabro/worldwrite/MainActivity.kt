@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         writeBinding.viewmodel = viewModel
         writeBinding.selectedwrite = viewModel.selectedWrite
-        closeWrite()
     }
 
     fun closeWrite() {
@@ -63,7 +62,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        closeWrite()
         viewModel.onResume()
     }
 
