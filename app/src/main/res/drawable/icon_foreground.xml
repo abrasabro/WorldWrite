@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+        <size
+            android:width="108px"
+            android:height="108px" />
+        <solid
+            android:color="#000000"/>
+        <inset
+            android:drawable="@drawable/ic_icon"/>
+</shape>

@@ -18,6 +18,6 @@
         app:backgroundTint="@android:color/holo_orange_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/icon" />
+        app:srcCompat="@drawable/nav" />
 
 </android.support.constraint.ConstraintLayout>
