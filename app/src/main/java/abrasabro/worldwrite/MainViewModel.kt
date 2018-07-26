@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -91,9 +92,7 @@ class MainViewModel : ObservableViewModel() {
     }
 
     private fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        mMap.setOnMarkerClickListener { marker: Marker? -> onMarkerClick(marker) }
-        mMap.setOnMapClickListener { latLng: LatLng? -> onMapClick(latLng) }
+        onMapReadyAgain(googleMap)
         val defaultMapCenter = LatLng(40.045204, -96.803178)
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(defaultMapCenter, 1f)))
         addFirebaseListeners()
@@ -222,8 +221,7 @@ class MainViewModel : ObservableViewModel() {
         val user = auth.currentUser
         if (user != null) {
             analytics().logEvent(FirebaseAnalytics.Event.LOGIN, Bundle().apply{putString(
-                    FirebaseAnalytics.Param.METHOD, user.providerId
-            )})
+                    FirebaseAnalytics.Param.METHOD, user.providerId)})
             onSignedInInitialize(user)
         } else {
             onSignedOutCleanup()

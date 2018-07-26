@@ -37,19 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()   // or .detectAll() for all detectable problems
-                .penaltyLog()
-                .penaltyFlashScreen()
-                .build())
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
-                .detectLeakedSqlLiteObjects()
-                .detectLeakedClosableObjects()
-                .penaltyLog()
-                .penaltyDeath()
-                .build())
         instance = this
         class InitFabric: AsyncTask<Unit, Unit, Unit>(){
             override fun doInBackground(vararg params: Unit?) {
@@ -122,5 +109,4 @@ class MainActivity : AppCompatActivity() {
         mFirebaseAnalytics.logEvent("attempt_share", null)
         ContextCompat.startActivity(this, Intent(this, MessageActivity::class.java), null)
     }
-
 }
