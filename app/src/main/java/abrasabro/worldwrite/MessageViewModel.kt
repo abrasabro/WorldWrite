@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -33,7 +34,7 @@ class MessageViewModel : ObservableViewModel(), OnMapReadyCallback {
     private val mDefaultLocation = LatLng(0.0, 0.0)
     private lateinit var mWriteMarker: Marker
     private val mFusedLocationProviderClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MessageActivity.instance)
-    private val geocoder = Geocoder(context(), Locale.getDefault())
+    private val mGeocoder = Geocoder(context(), Locale.getDefault())
     val mAddress: ObservableField<String> = ObservableField("")
     var mMessage: String = ""
 
@@ -148,31 +149,38 @@ class MessageViewModel : ObservableViewModel(), OnMapReadyCallback {
 
     private fun putMarker(latLng: LatLng) {
         mWriteMarker.position = latLng
-
-        var addresses = listOf<Address>()
-        try {
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-        } catch (e: IOException) {
-            Log.d("putMarker", "geocoder network or I/O exception")
-            errorDialog("geocoder could not access the network")
-        }
-
-        if (addresses.isNotEmpty()) {
-            mAddress.set("")
-            if (addresses[0].getAddressLine(0) != null) {
-                mAddress.set(addresses[0].getAddressLine(0))
-                if (addresses[0].getAddressLine(1) != null) {
-                    mAddress.set(mAddress.get() + addresses[0].getAddressLine(1))
-                }
-                return
-            }
-            if (addresses[0].featureName != null) {
-                mAddress.set(addresses[0].featureName)
-                return
-            }
-        }
         mAddress.set("unknown")
+        class GetLocation() : AsyncTask<Unit, Unit, Unit>(){
+            override fun doInBackground(vararg params: Unit?) {
+                var addresses = listOf<Address>()
+                try {
+                    addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                } catch (e: IOException) {
+                    Log.d("putMarker", "geocoder network or I/O exception")
+                }
+
+                if (addresses.isNotEmpty()) {
+                    mAddress.set("")
+                    if (addresses[0].getAddressLine(0) != null) {
+                        mAddress.set(addresses[0].getAddressLine(0))
+                        if (addresses[0].getAddressLine(1) != null) {
+                            mAddress.set(mAddress.get() + addresses[0].getAddressLine(1))
+                        }
+                        return
+                    }
+                    if (addresses[0].featureName != null) {
+                        mAddress.set(addresses[0].featureName)
+                        return
+                    }
+                }
+                mAddress.set("unknown")
+            }
+        }
+        GetLocation().execute()
     }
+
+
+
 
     fun makeMessage() {
         val write = Write()

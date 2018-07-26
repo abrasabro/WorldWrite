@@ -31,7 +31,7 @@ class MainViewModel : ObservableViewModel() {
     var selectedWrite: Write = Write()
     lateinit var mMap: GoogleMap
     lateinit var mapPin: BitmapDescriptor
-    val mapMarkerToWriteHashMap = mutableMapOf<Marker, Write>()
+    val mapMarkerToWriteHashMap = mutableMapOf<String, Write>()
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val messagesDatabaseReference = firebaseDatabase.reference.child("messages")
@@ -107,14 +107,19 @@ class MainViewModel : ObservableViewModel() {
 
     private fun onMarkerClick(marker: Marker?): Boolean {
         if (marker != null) {
-            val write = mapMarkerToWriteHashMap[marker]
+            val write = mapMarkerToWriteHashMap[marker.id]
             if (write != null) {
                 analytics().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, null)
                 showWrite(write)
                 return true
+            }else{
+                errorDialog("Write for Marker is null")
+                return false
             }
+        }else{
+            errorDialog("Marker does not exist")
+            return false
         }
-        return false
     }
 
     fun onMapClick(latLng: LatLng?) {
@@ -167,7 +172,7 @@ class MainViewModel : ObservableViewModel() {
                 if (write.messageUID == selectedWrite?.messageUID) {
                     selectedWrite.set(write)
                 }
-                mapMarkerToWriteHashMap.forEach { key: Marker, value: Write ->
+                mapMarkerToWriteHashMap.forEach { key: String, value: Write ->
                     if (value.messageUID == write.messageUID) {
                         mapMarkerToWriteHashMap[key] = write
                     }
@@ -182,7 +187,7 @@ class MainViewModel : ObservableViewModel() {
                 val marker = mMap.addMarker(MarkerOptions()
                         .position(LatLng(write.lat, write.lon))
                         .icon(mapPin))
-                mapMarkerToWriteHashMap[marker] = write
+                mapMarkerToWriteHashMap[marker.id] = write
             }
         }
 
@@ -249,6 +254,7 @@ class MainViewModel : ObservableViewModel() {
     fun onPause() {
         firebaseAuth.removeAuthStateListener(authStateListener)
         messagesDatabaseReference.removeEventListener(messagesEventListener)
+        mMap.clear()
         mapMarkerToWriteHashMap.clear()
     }
 
