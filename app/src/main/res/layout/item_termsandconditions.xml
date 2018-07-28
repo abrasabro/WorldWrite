@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/item_termsandconditions_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:isScrollContainer="true"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/item_termsandconditions_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="When you transmit, upload, post, or otherwise make available data, text, messages, or other materials (&quot;User Content&quot;) on or to World Write, you are entirely responsible for such User Content.
+\nThis means that you, and not World Write or its affiliates, are entirely responsible for all User Content that you post to World Write.
+\nAll users of World Write agree that their access to and use of World Write are subject to this User Generated Content Policy and all applicable laws, and that any such access or use is undertaken at the user's own risk.
+\nThe terms of this User Generated Content Policy are subject to change at any time without prior notice.
+\nTO THE FULLEST EXTENT PERMISSIBLE PURSUANT TO APPLICABLE LAW, NEITHER WORLD WRITE NOR ANY OTHER PARTY INVOLVED IN CREATING, PRODUCING OR DELIVERING WORLD WRITE IS LIABLE FOR ANY DIRECT, INCIDENTAL, CONSEQUENTIAL, INDIRECT, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING LOST PROFITS ARISING OUT OF YOUR ACCESS TO, OR USE OF, WORLD WRITE EVEN IF WORLD WRITE OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. WITHOUT LIMITING THE FOREGOING, EVERYTHING ON WORLD WRITE  IS PROVIDED TO YOU &quot;AS IS&quot; WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OR MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+\nYou agree not to engage in or assist or encourage others to engage in transmitting, uploading, posting, or otherwise making available on World Write User Content that
+\n sexualizes minors
+\n depicts sex acts
+\n depicts, describes, or encourages bestiality.
+\n promotes escort services or other services that may be interpreted as providing sexual acts in exchange for compensation.
+\n promotes violence, or incites hatred against individuals or groups based on race or ethnic origin, religion, disability, age, nationality, veteran status, sexual orientation, gender, gender identity, or any other characteristic that is associated with systemic discrimination or marginalization.
+\n depicts or facilitates gratuitous violence or other dangerous activities.
+\n graphically depicts or describes realistic violence or violent threats to any person or animal.
+\n promotes self harm, suicide, eating disorders, choking games or other acts where serious injury or death may result.
+\n is related to terrorism, such as content that promotes terrorist acts, incites violence, or celebrates terrorist attacks.
+\n lacks reasonable sensitivity towards or capitalizes on a natural disaster, atrocity, conflict, death, or other tragic event.
+\n contains or facilitates threats, harassment, or bullying.
+\n facilitates the sale of explosives, firearms, ammunition, or certain firearms accessories including those that enable a firearm to simulate automatic fire or convert a firearm to automatic fire (e.g. bump stocks, gatling triggers, drop-in auto sears, conversion kits), and magazines or belts carrying more than 30 rounds.
+\n facilitates or promotes illegal activities.
+\n Facilitates the sale or purchase of illegal drugs or prescription drugs without a prescription.
+\n Depicts or encourages the use or sale of drugs, alcohol, or tobacco by minors.
+\n contains instructions for growing or manufacturing illegal drugs.
+\n is, or which encourages activity or conduct that is, unlawful, harmful, threatening, abusive, harassing, tortious, defamatory, vulgar, obscene, pornographic, libelous, invasive of another's privacy, hateful, or racially, ethnically or otherwise objectionable; you do not have a right to make available under any law or under contractual or fiduciary relationships; is known by you to be false, inaccurate or misleading; you were compensated for or granted any consideration by any third party; contains restricted or hidden content; or infringes any patent, trademark, trade secret, copyright, right of publicity or other proprietary rights of any party. "
+            />
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

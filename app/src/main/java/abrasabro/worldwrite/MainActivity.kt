@@ -18,6 +18,7 @@ import android.databinding.DataBindingUtil
 import android.os.AsyncTask
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.fabric.sdk.android.Fabric
@@ -107,6 +108,19 @@ class MainActivity : AppCompatActivity() {
 
     fun startMessageActivity(view: View) {
         mFirebaseAnalytics.logEvent("attempt_share", null)
-        ContextCompat.startActivity(this, Intent(this, MessageActivity::class.java), null)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Terms and Conditions")
+        builder.setView(R.layout.item_termsandconditions)
+        builder.setPositiveButton("Agree")
+        { _, _: Int ->
+            ContextCompat.startActivity(this, Intent(this, MessageActivity::class.java), null)
+        }
+        builder.setNegativeButton("Cancel")
+        { _, _: Int ->
+
+        }
+        //builder.setOnCancelListener {  }
+        builder.create().show()
     }
 }
